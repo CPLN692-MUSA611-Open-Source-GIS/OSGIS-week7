@@ -126,12 +126,17 @@ of the application to report/display this information.
 
 ===================== */
 
-var dataset = ""
+var dataset = "https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/geojson/philadelphia-garbage-collection-boundaries.geojson"
 var featureGroup;
 
 var myStyle = function(feature) {
-  return {};
-};
+  switch (feature.properties.COLLDAY) {
+    case 'MON':   return {color: "#699DCC"};
+    case 'TUE':   return {color: "#8382DE"};
+    case 'WED':   return {color: "#DC878F"};
+    case 'THU':   return {color: "#FFB898"};
+    case 'FRI':   return {color: "#E7E3F1"};
+}};
 
 var showResults = function() {
   /* =====================
@@ -154,13 +159,41 @@ var eachFeatureFunction = function(layer) {
     Check out layer.feature to see some useful data about the layer that
     you can use in your application.
     ===================== */
+    switch (layer.feature.properties.COLLDAY) {
+      case 'MON':   day = "Monday";
+      case 'TUE':   day = "Tuesday";
+      case 'WED':   day = "Wednesday";
+      case 'THU':   day = "Thursday";
+      case 'FRI':   day = "Friday";
+    }
+    $('.day-of-week').text(day)
     console.log(layer.feature);
     showResults();
+    /* zoom in */
+    map.fitBounds( event.target.getBounds())
   });
 };
 
+var legend = L.control({ position: "bottomright" });
+
+legend.onAdd = function(map) {
+  var div = L.DomUtil.create("div", "legend");
+  div.innerHTML += "<h4>Legend</h4>";
+  div.innerHTML += '<i style="background: #699DCC"></i><span>Monday</span><br>';
+  div.innerHTML += '<i style="background: #8382DE"></i><span>Tuesday</span><br>';
+  div.innerHTML += '<i style="background: #DC878F"></i><span>Wednesday</span><br>';
+  div.innerHTML += '<i style="background: #FFB898"></i><span>Thursday</span><br>';
+  div.innerHTML += '<i style="background: #E7E3F1"></i><span>Friday</span><br>';
+  
+  return div;
+};
+
 var myFilter = function(feature) {
-  return true;
+  if (feature.properties.COLLDAY.length == 3 ) {
+    return true;
+  } else {
+    return false
+  }
 };
 
 $(document).ready(function() {
@@ -170,7 +203,7 @@ $(document).ready(function() {
       style: myStyle,
       filter: myFilter
     }).addTo(map);
-
+    legend.addTo(map);
     // quite similar to _.each
     featureGroup.eachLayer(eachFeatureFunction);
   });
