@@ -30,5 +30,18 @@ p.main {
 .legend {
   position: absolute;
   background-color: #fff;
+  top: 20px;
+  height: 320px;
+  right: 20px;
+  width: 135px;
+  padding: 10px;
+  font-size: 14px;
   z-index: 2000;
+}
+
+.legendBox {
+  position:relative;
+  width: 20px;
+  height: 15px; 
+  /* float:left; */
 }
