@@ -126,11 +126,18 @@ of the application to report/display this information.
 
 ===================== */
 
-var dataset = ""
+var dataset = "https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/geojson/philadelphia-garbage-collection-boundaries.geojson"
 var featureGroup;
 
 var myStyle = function(feature) {
-  return {};
+  switch(feature.properties.COLLDAY){
+    case 'MON': return {color: "#bfd3e6", fillOpacity: 0.6};
+    case 'TUE': return {color: "#9ebcda", fillOpacity: 0.6};
+    case 'WED': return {color: "#8c96c6", fillOpacity: 0.6};
+    case 'THU': return {color: "#8856a7", fillOpacity: 0.6};
+    case 'FRI': return {color: "#810f7c", fillOpacity: 0.6};
+  }
+  
 };
 
 var showResults = function() {
@@ -154,13 +161,33 @@ var eachFeatureFunction = function(layer) {
     Check out layer.feature to see some useful data about the layer that
     you can use in your application.
     ===================== */
+    'day-of-week'
+    var Day = "apple";
+    if(layer.feature.properties.COLLDAY == "FRI"){
+      Day = "Friday"
+    }
+    if(layer.feature.properties.COLLDAY == "MON"){
+      Day = "Monday"
+    }
+    if(layer.feature.properties.COLLDAY == "TUE"){
+      Day = "Tuesday"
+    }
+    if(layer.feature.properties.COLLDAY == "WED"){
+      Day = "Wednesday"
+    }
+    if(layer.feature.properties.COLLDAY == "THU"){
+      Day = "Thursday"
+    }
+    $('.day-of-week').text(Day);
     console.log(layer.feature);
+    console.log(event.target.getBounds());
+    map.fitBounds(event.target.getBounds());
     showResults();
   });
 };
 
 var myFilter = function(feature) {
-  return true;
+  return feature.properties.COLLDAY != " ";
 };
 
 $(document).ready(function() {
