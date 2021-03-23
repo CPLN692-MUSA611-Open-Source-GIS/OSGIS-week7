@@ -126,11 +126,15 @@ of the application to report/display this information.
 
 ===================== */
 
-var dataset = ""
+var dataset = "https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/geojson/philadelphia-garbage-collection-boundaries.geojson"
 var featureGroup;
 
 var myStyle = function(feature) {
-  return {};
+  if (feature.properties.COLLDAY == "MON") return {color: '#ff6666'}; //red
+  if (feature.properties.COLLDAY == "TUE") return {color: '#ffb266'}; //orange
+  if (feature.properties.COLLDAY == "WED") return {color: '#6666ff'}; //dark blue
+  if (feature.properties.COLLDAY == "THU") return {color: '#66b2ff'}; //blue
+  if (feature.properties.COLLDAY == "FRI") return {color: '#b266ff'}; //purple
 };
 
 var showResults = function() {
@@ -166,6 +170,7 @@ var myFilter = function(feature) {
 $(document).ready(function() {
   $.ajax(dataset).done(function(data) {
     var parsedData = JSON.parse(data);
+    console.log(parsedData)
     featureGroup = L.geoJson(parsedData, {
       style: myStyle,
       filter: myFilter
