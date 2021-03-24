@@ -128,6 +128,7 @@ of the application to report/display this information.
 
 var dataset = "https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/geojson/philadelphia-garbage-collection-boundaries.geojson"
 var featureGroup;
+var initialBounds = map.getBounds()
 
 var myStyle = function(feature) {
       if (feature.properties.COLLDAY === 'MON') {return {color: '#DFFF00'}}
@@ -148,6 +149,17 @@ var showResults = function() {
   $('#intro').hide();
   // => <div id="results">
   $('#results').show();
+};
+
+var closeResults = function() {
+  /* =======
+  Function to close out of the zoomed in section of the map and return to
+  the original state of the application
+  ======== */
+  $('#results').hide();
+  // => <div id="results">
+  $('#intro').show();
+  map.fitBounds(initialBounds)
 };
 
 
@@ -191,7 +203,16 @@ $(document).ready(function() {
       filter: myFilter
     }).addTo(map);
 
+    var counts = _.countBy(parsedData.features, function(feature){
+      return feature.properties.COLLDAY
+    })
+    // Log this to the console for now. Will add to sidebar later if I have time.
+    console.log(counts)
+
     // quite similar to _.each
     featureGroup.eachLayer(eachFeatureFunction);
+    // For now, this just returns to initial page after 5s.
+    // Will add close button later if I have time.
+    setTimeout(() => {  closeResults() }, 5000);
   });
 });
