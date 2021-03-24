@@ -151,6 +151,17 @@ var showResults = function() {
 };
 
 
+var showDay = function(feature) {
+  var day = '';
+  if (feature.properties.COLLDAY == "MON") return day = "Monday"; 
+  if (feature.properties.COLLDAY == "TUE") return day = "Tuesday"; 
+  if (feature.properties.COLLDAY == "WED") return day = "Wednesday"; 
+  if (feature.properties.COLLDAY == "THU") return day = "Thursday"; 
+  if (feature.properties.COLLDAY == "FRI") return day = "Friday"; 
+}
+
+
+
 var eachFeatureFunction = function(layer) {
   layer.on('click', function (event) {
     /* =====================
@@ -158,19 +169,20 @@ var eachFeatureFunction = function(layer) {
     Check out layer.feature to see some useful data about the layer that
     you can use in your application.
     ===================== */
-    console.log(layer.feature);
+    $('h1.day-of-week').text(showDay(layer.feature))
+    $('span.day-of-week').text(showDay(layer.feature))
     showResults();
   });
 };
 
 var myFilter = function(feature) {
-  return true;
+  var dayinfo = feature.properties.COLLDAY
+  return dayinfo.length > 1; //the length of empty string is 1
 };
 
 $(document).ready(function() {
   $.ajax(dataset).done(function(data) {
     var parsedData = JSON.parse(data);
-    console.log(parsedData)
     featureGroup = L.geoJson(parsedData, {
       style: myStyle,
       filter: myFilter
