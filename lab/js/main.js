@@ -171,6 +171,7 @@ var eachFeatureFunction = function(layer) {
     ===================== */
     $('h1.day-of-week').text(showDay(layer.feature))
     $('span.day-of-week').text(showDay(layer.feature))
+    map.fitBounds(event.target.getBounds());
     showResults();
   });
 };
