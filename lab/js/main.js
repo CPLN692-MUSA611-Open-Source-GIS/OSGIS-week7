@@ -3,15 +3,15 @@ Leaflet Configuration
 ===================== */
 
 var map = L.map('map', {
-  center: [40.000, -75.1090],
-  zoom: 11
+    center: [40.000, -75.1090],
+    zoom: 11
 });
 var Stamen_TonerLite = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
-  attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  subdomains: 'abcd',
-  minZoom: 0,
-  maxZoom: 20,
-  ext: 'png'
+    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    subdomains: 'abcd',
+    minZoom: 0,
+    maxZoom: 20,
+    ext: 'png'
 }).addTo(map);
 
 
@@ -126,52 +126,61 @@ of the application to report/display this information.
 
 ===================== */
 
-var dataset = ""
+var dataset = "https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/geojson/philadelphia-garbage-collection-boundaries.geojson"
 var featureGroup;
+var initialBounds = map.getBounds()
 
 var myStyle = function(feature) {
-  return {};
+    if (feature.properties.COLLDAY === 'MON') { return { color: '#1b9e77' } } else if (feature.properties.COLLDAY === 'TUE') { return { color: '#d95f02' } } else if (feature.properties.COLLDAY === 'WED') { return { color: '#7570b3' } } else if (feature.properties.COLLDAY === 'THU') { return { color: '#e7298a' } } else if (feature.properties.COLLDAY === 'FRI') { return { color: '#66a61e' } }
 };
 
 var showResults = function() {
-  /* =====================
-  This function uses some jQuery methods that may be new. $(element).hide()
-  will add the CSS "display: none" to the element, effectively removing it
-  from the page. $(element).show() removes "display: none" from an element,
-  returning it to the page. You don't need to change this part.
-  ===================== */
-  // => <div id="intro" css="display: none">
-  $('#intro').hide();
-  // => <div id="results">
-  $('#results').show();
+    /* =====================
+    This function uses some jQuery methods that may be new. $(element).hide()
+    will add the CSS "display: none" to the element, effectively removing it
+    from the page. $(element).show() removes "display: none" from an element,
+    returning it to the page. You don't need to change this part.
+    ===================== */
+    // => <div id="intro" css="display: none">
+    $('#intro').hide();
+    // => <div id="results">
+    $('#results').show();
 };
 
-
 var eachFeatureFunction = function(layer) {
-  layer.on('click', function (event) {
-    /* =====================
-    The following code will run every time a layer on the map is clicked.
-    Check out layer.feature to see some useful data about the layer that
-    you can use in your application.
-    ===================== */
-    console.log(layer.feature);
-    showResults();
-  });
+    layer.on('click', function(event) {
+        /* =====================
+        The following code will run every time a layer on the map is clicked.
+        Check out layer.feature to see some useful data about the layer that
+        you can use in your application.
+        ===================== */
+        console.log(layer.feature);
+        let day = ''
+        if (layer.feature.properties.COLLDAY === 'MON') { day = 'Monday' } else if (layer.feature.properties.COLLDAY === 'TUE') { day = 'Tuesday' } else if (layer.feature.properties.COLLDAY === 'WED') { day = 'Wednesday' } else if (layer.feature.properties.COLLDAY === 'THU') { day = 'Thursday' } else if (layer.feature.properties.COLLDAY === 'FRI') { day = 'Friday' }
+        $('.day-of-week').text(day)
+        var mapBounds = event.target.getBounds();
+        map.fitBounds(mapBounds);
+        showResults();
+    });
 };
 
 var myFilter = function(feature) {
-  return true;
+    if (feature.properties.COLLDAY != ' ') {
+        return true;
+    } else {
+        return false
+    }
 };
 
 $(document).ready(function() {
-  $.ajax(dataset).done(function(data) {
-    var parsedData = JSON.parse(data);
-    featureGroup = L.geoJson(parsedData, {
-      style: myStyle,
-      filter: myFilter
-    }).addTo(map);
+    $.ajax(dataset).done(function(data) {
+        var parsedData = JSON.parse(data);
+        featureGroup = L.geoJson(parsedData, {
+            style: myStyle,
+            filter: myFilter
+        }).addTo(map);
 
-    // quite similar to _.each
-    featureGroup.eachLayer(eachFeatureFunction);
-  });
+        // quite similar to _.each
+        featureGroup.eachLayer(eachFeatureFunction);
+    });
 });

@@ -1,41 +1,55 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8">
     <!-- CSS Imports -->
     <link rel="stylesheet" href="css/reset.css" />
     <link rel="stylesheet" href="css/leaflet.css" />
     <link rel="stylesheet" href="css/style.css" />
-  </head>
-  <body>
+</head>
+
+<body>
     <!-- Sidebar -->
     <div class="sidebar">
-      <div id="intro">
-        <h1>Garbage Collection Map</h1>
-        <p class="main">The city of Philadelphia collects garbage from
-        Monday—Friday. The city is divided into 67 regions, each of which is
-        assigned to one of the five days of the week.</p>
-        <p>This application shows each region color coded based on day of
-        week of garbage collection. To get more information about garbage
-        collection for one of the regions, click on that region on the map.</p>
-      </div>
-      <div id="results" style="display: none;">
-        <h1 class="day-of-week">Day of Week</h1>
-        <p class="main">Your garbage collection day is <span class="day-of-week">
+        <img src="images/logo.png" alt="Streets Phladelphia logo">
+        <div id="intro">
+            <h1>Garbage Collection Map</h1>
+            <p class="main">The City of Philadelphia collects garbage from Monday—Friday. The city is divided into 67 regions, each of which is assigned to one of the five days of the week.</p>
+            <p>This application shows each region color coded based on day of week of garbage collection. To get more information about garbage collection for one of the regions, click on that region on the map.</p>
+        </div>
+        <div id="results" style="display: none;">
+            <h1 class="day-of-week">Day of Week</h1>
+            <p class="main">Your garbage collection day is <span class="day-of-week">
         Day of Week</span>.</p>
-        <p>Please be sure to leave your garbage outside on <span class="day-of-week">
-        Day of Week</span>. If this week is a federal holiday, leave your
-        garbage outside on the following day.</p>
-      </div>
+            <p>Please be sure to leave your garbage outside on <span class="day-of-week">
+        Day of Week</span>. If this week is a federal holiday, leave your garbage outside on the following day.</p>
+        </div>
+        <a href="https://www.philadelphiastreets.com/sanitation/residential/collection-schedules/">Holiday Collection Schedule</a>
     </div>
     <!-- Map -->
     <div id="map" class="map"></div>
     <!-- Legend -->
-    <div class="legend"></div>
+    <div class="legend">
+        <h3>Collection Day</h3>
+        <ul>
+            <div class="swatch" style="background: #1b9e77; border: 2px #1b9e77" id="mon"></div>
+            <p class="label">Monday</p>
+            <div class="swatch" style="background: #d95f02; border: 2px #d95f02" id="tue"></div>
+            <p class="label">Tuesday</p>
+            <div class="swatch" style="background: #7570b3; border: 2px #7570b3" id="wed"></div>
+            <p class="label">Wednesday</p>
+            <div class="swatch" style="background: #e7298a; border: 2px #e7298a" id="thu"></div>
+            <p class="label">Thursday</p>
+            <div class="swatch" style="background: #66a61e; border: 2px #66a61e" id="fri"></div>
+            <p class="label">Friday</p>
+        </ul>
+    </div>
     <!-- Javascript Imports -->
-    <script src="js/jquery-2.2.0.js"></script>
-    <script src="js/underscore.js"></script>
-    <script src="js/leaflet.js"></script>
-    <script src="js/main.js"></script>
-  </body>
+    <script src="js/jquery-2.2.0.js "></script>
+    <script src="js/underscore.js "></script>
+    <script src="js/leaflet.js "></script>
+    <script src="js/main.js "></script>
+</body>
+
 </html>
