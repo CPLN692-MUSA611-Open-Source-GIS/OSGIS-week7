@@ -5,7 +5,6 @@
 For your [midterm project](https://github.com/CPLN692-MUSA611-Open-Source-GIS/midterm)
 you will create a story map application. The midterm is due by start of class, April 2nd (we will get some time to work in-class on March 26th). The assignment this week will have you gather data and think about functions you might use in preparation for the midterm. You are also welcome to get started on writing the midterm if you are so inclined.
 
-
 ### Task 1: Prepare Geographic Data
 
 Think about what data you want to tell a story about. You can choose a dataset
