@@ -1,5 +1,7 @@
 # Assignment: Preparing for Midterm
 
+[Figma wireframe](https://www.figma.com/file/KUxXS4o99tkmZgNvJN7wrR/BradfordMidtermDraft?node-id=0%3A1) for NYC Digital Divide application.
+
 ## Introduction
 
 For your [midterm project](https://github.com/CPLN692-MUSA611-Open-Source-GIS/midterm)
