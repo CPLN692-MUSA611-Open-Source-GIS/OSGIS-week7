@@ -1,6 +1,8 @@
 /* ================================
 Week 6 Assignment: Slide Model
 ================================ */
+//fignma layout
+//https://www.figma.com/file/GwSGFSWUpRsLqdPjehJRkJ/Midterm-Mock-Up?node-id=1%3A116
 
 /** Here's a simple 'model' of a slide.
  *  It tracks the slide's index and the title we want in our HTML
