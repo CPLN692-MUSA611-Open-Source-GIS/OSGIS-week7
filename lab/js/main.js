@@ -160,14 +160,23 @@ var eachFeatureFunction = function(layer) {
     you can use in your application.
     ===================== */
     switch (layer.feature.properties.COLLDAY) {
-      case 'MON':   day = "Monday";
-      case 'TUE':   day = "Tuesday";
-      case 'WED':   day = "Wednesday";
-      case 'THU':   day = "Thursday";
+      case 'MON':   
+        day = "Monday";
+        break;
+      case 'TUE':   
+        day = "Tuesday";
+        break;
+      case 'WED':   
+        day = "Wednesday";
+        break;
+      case 'THU':   
+        day = "Thursday";
+        break;
       case 'FRI':   day = "Friday";
+        break;
     }
     $('.day-of-week').text(day)
-    console.log(layer.feature);
+    console.log(layer.feature.properties.COLLDAY);
     showResults();
     /* zoom in */
     map.fitBounds( event.target.getBounds())

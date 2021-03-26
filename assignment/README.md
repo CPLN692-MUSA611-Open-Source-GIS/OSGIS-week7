@@ -27,6 +27,7 @@ for a few potential sources)
 - Points, lines, and polygons are all fine
 - Data should be real stuff (don't create a dataset with fictional locations)
 
+data = "https://data.sfgov.org/resource/g8m3-pdis.json"
 
 ### Task 2: Think About Slide Data
 
@@ -96,4 +97,5 @@ In preparation for the midterm, mock out the design of your midterm's slides
 (only one figma screen should be necessary - remember, the point is to
 have a *rough* sketch).
 
+Figma: https://www.figma.com/file/Iyrw0t5u4D04XV0OUgUeIK/Midterm?node-id=0%3A1
 
