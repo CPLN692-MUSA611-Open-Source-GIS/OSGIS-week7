@@ -30,5 +30,12 @@ p.main {
 .legend {
   position: absolute;
   background-color: #fff;
+  bottom: 250px; 
+  left: 20px; 
   z-index: 2000;
+}
+
+.legendTitle { 
+  font-size: medium; 
+  font-weight: bold; 
 }
