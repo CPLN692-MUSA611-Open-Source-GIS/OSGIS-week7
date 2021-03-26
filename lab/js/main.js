@@ -126,11 +126,15 @@ of the application to report/display this information.
 
 ===================== */
 
-var dataset = ""
+var dataset = "https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/geojson/philadelphia-garbage-collection-boundaries.geojson"
 var featureGroup;
 
 var myStyle = function(feature) {
-  return {};
+  if (feature.properties.COLLDAY == "MON") return {color: '#ff6666'}; //red
+  if (feature.properties.COLLDAY == "TUE") return {color: '#ffb266'}; //orange
+  if (feature.properties.COLLDAY == "WED") return {color: '#6666ff'}; //dark blue
+  if (feature.properties.COLLDAY == "THU") return {color: '#66b2ff'}; //blue
+  if (feature.properties.COLLDAY == "FRI") return {color: '#b266ff'}; //purple
 };
 
 var showResults = function() {
@@ -147,6 +151,17 @@ var showResults = function() {
 };
 
 
+var showDay = function(feature) {
+  var day = '';
+  if (feature.properties.COLLDAY == "MON") return day = "Monday"; 
+  if (feature.properties.COLLDAY == "TUE") return day = "Tuesday"; 
+  if (feature.properties.COLLDAY == "WED") return day = "Wednesday"; 
+  if (feature.properties.COLLDAY == "THU") return day = "Thursday"; 
+  if (feature.properties.COLLDAY == "FRI") return day = "Friday"; 
+}
+
+
+
 var eachFeatureFunction = function(layer) {
   layer.on('click', function (event) {
     /* =====================
@@ -154,13 +169,16 @@ var eachFeatureFunction = function(layer) {
     Check out layer.feature to see some useful data about the layer that
     you can use in your application.
     ===================== */
-    console.log(layer.feature);
+    $('h1.day-of-week').text(showDay(layer.feature))
+    $('span.day-of-week').text(showDay(layer.feature))
+    map.fitBounds(event.target.getBounds());
     showResults();
   });
 };
 
 var myFilter = function(feature) {
-  return true;
+  var dayinfo = feature.properties.COLLDAY
+  return dayinfo.length > 1; //the length of empty string is 1
 };
 
 $(document).ready(function() {
