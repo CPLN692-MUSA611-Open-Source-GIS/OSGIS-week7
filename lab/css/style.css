@@ -27,8 +27,20 @@ p.main {
     font-size: 16px;
 }
 
-.legend {
+/* .legend {
   position: absolute;
   background-color: #fff;
   z-index: 2000;
+} */
+.Legend div{
+    margin-left:15px;
+    width:16px;
+    border:1px solid #808080;
+    z-index: 2000;
 }
+
+.Purple {background-color:purple;}
+.Pink {background-color:pink;}
+.Green {background-color:green;}
+.Blue {background-color:blue;}
+.Yellow {background-color:yellow;}
