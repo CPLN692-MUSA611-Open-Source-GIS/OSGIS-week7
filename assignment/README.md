@@ -27,6 +27,11 @@ for a few potential sources)
 - Points, lines, and polygons are all fine
 - Data should be real stuff (don't create a dataset with fictional locations)
 
+https://data.sfgov.org/Health-and-Social-Services/Community-Resiliency-Indicator-System/banc-xdvr/data
+https://data.sfgov.org/City-Infrastructure/Curb-Ramps/ch9w-7kih/data
+https://data.sfgov.org/City-Infrastructure/Parking-Signs-Street-Space-Permits/sftu-nd43/data
+https://data.sfgov.org/City-Infrastructure/311-Cases/vw6y-z8j6/data
+https://data.sfgov.org/Transportation/Bicycle-Parking/hn4j-6fx5/data （https://data.sfgov.org/resource/hn4j-6fx5.json）
 
 ### Task 2: Think About Slide Data
 
@@ -38,7 +43,6 @@ another type of data.
 How will you represent this data that is about the slides? In slideModel.js,
 write a brief example that shows what the data for one slide might look like.
 Think about how it will be stored and read in Javascript (arrays, objects, etc.).
-
 
 ### Task 3: Write Function Signatures
 
@@ -96,4 +100,4 @@ In preparation for the midterm, mock out the design of your midterm's slides
 (only one figma screen should be necessary - remember, the point is to
 have a *rough* sketch).
 
-
+https://www.figma.com/file/2TvoPsfs3k5HtQ6dRITNHp/Untitled?node-id=0%3A1
