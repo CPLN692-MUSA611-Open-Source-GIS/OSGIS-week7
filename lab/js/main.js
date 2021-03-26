@@ -126,11 +126,26 @@ of the application to report/display this information.
 
 ===================== */
 
-var dataset = ""
+var dataset = "https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/geojson/philadelphia-garbage-collection-boundaries.geojson"
 var featureGroup;
 
 var myStyle = function(feature) {
-  return {};
+    if(feature.properties.COLLDAY === "MON"){
+        return {fillColor: 'red'};
+    }
+    if(feature.properties.COLLDAY === "TUE"){
+        return {fillColor: 'blue'};
+    }
+    if(feature.properties.COLLDAY === "WED"){
+        return {fillColor: 'green'};
+    }
+    if(feature.properties.COLLDAY === "THU"){
+        return {fillColor: 'orange'};
+    }
+    if(feature.properties.COLLDAY === "FRI"){
+        return {fillColor: 'purple'};
+    }
+    // console.log(feature.properties.COLLDAY)
 };
 
 var showResults = function() {
@@ -155,12 +170,41 @@ var eachFeatureFunction = function(layer) {
     you can use in your application.
     ===================== */
     console.log(layer.feature);
+
+    map.fitBounds(event.target.getBounds());
+
+
+    var day = ""
+    if (layer.feature.properties.COLLDAY === "MON"){
+        day = "Monday"
+    }
+    if (layer.feature.properties.COLLDAY === "TUE"){
+        day = "Tuesday"
+    }
+    if (layer.feature.properties.COLLDAY === "WED"){
+        day = "Wednesday"
+    }
+    if (layer.feature.properties.COLLDAY === "THU"){
+        day = "Thursday"
+    }
+    if (layer.feature.properties.COLLDAY === "FRI"){
+        day = "Friday"
+    }
+
+
+    $('.day-of-week').each(function() {
+        console.log(day)
+        $(this).text(day);
+    });
+
+    // event.target.getLayerId
+
     showResults();
   });
 };
 
 var myFilter = function(feature) {
-  return true;
+  return feature.properties.COLLDAY !== " ";
 };
 
 $(document).ready(function() {
@@ -170,6 +214,8 @@ $(document).ready(function() {
       style: myStyle,
       filter: myFilter
     }).addTo(map);
+
+
 
     // quite similar to _.each
     featureGroup.eachLayer(eachFeatureFunction);
