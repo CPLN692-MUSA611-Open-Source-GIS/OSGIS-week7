@@ -126,11 +126,19 @@ of the application to report/display this information.
 
 ===================== */
 
-var dataset = ""
+var dataset = "https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/geojson/philadelphia-garbage-collection-boundaries.geojson"
 var featureGroup;
 
 var myStyle = function(feature) {
-  return {};
+  switch (feature.properties.COLLDAY) {
+    case 'MON': return {fillColor: "#756060", weight:1}
+    case 'TUE': return {fillColor: "#fed049", weight:1}
+    case 'WED': return {fillColor: "#007580", weight:1}
+    case 'THU': return {fillColor: "#282846", weight:1}
+    case 'FRI': return {fillColor: "#c06014", weight:1}
+    case 'SAT': return {fillColor: "#536162", weight:1}
+    case 'SUN': return {fillColor: "#cdc733", weight:1}
+  }
 };
 
 var showResults = function() {
@@ -154,13 +162,37 @@ var eachFeatureFunction = function(layer) {
     Check out layer.feature to see some useful data about the layer that
     you can use in your application.
     ===================== */
-    console.log(layer.feature);
+    if (layer.feature.properties.COLLDAY === 'MON') {
+      $('.day-of-week').text("Monday")
+    }
+    if (layer.feature.properties.COLLDAY === 'TUE') {
+      $('.day-of-week').text("Tuesday")
+    }
+    if (layer.feature.properties.COLLDAY === 'WED') {
+      $('.day-of-week').text("Wednesday")
+    }
+    if (layer.feature.properties.COLLDAY === 'THU') {
+      $('.day-of-week').text("Thursday")
+    }
+    if (layer.feature.properties.COLLDAY === 'FRI') {
+      $('.day-of-week').text("Friday")
+    }
+    if (layer.feature.properties.COLLDAY === 'SAT') {
+      $('.day-of-week').text("Saturday")
+    }
+    if (layer.feature.properties.COLLDAY === 'SUN') {
+      $('.day-of-week').text("Sunday")
+    }
     showResults();
+    console.log(layer.feature)
+    var bounds = event.target.getBounds()
+    console.log (bounds)
+    map.fitBounds (bounds)
   });
 };
 
 var myFilter = function(feature) {
-  return true;
+    return feature.properties.COLLDAY !== " "
 };
 
 $(document).ready(function() {
