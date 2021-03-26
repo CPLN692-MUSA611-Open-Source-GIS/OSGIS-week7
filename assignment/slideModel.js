@@ -11,6 +11,12 @@ var slideExample = {
   filter: function(geojsonFeature) { return true }
 };
 
+var slideExample = {
+  slideNumber: 2,
+  title: "neighborhood with access to supermarket",
+  filter: function(geojsonFeature) { return neighborhood.SUPERMART_ACCESS==="YES" }
+};
+
 /** Here's the simplest implementation I could come up with for
  * representing a deck of slides (nothing exotic is necessary!)
  */
