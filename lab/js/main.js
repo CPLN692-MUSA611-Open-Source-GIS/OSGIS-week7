@@ -162,7 +162,7 @@ var eachFeatureFunction = function(layer) {
     you can use in your application.
     ===================== */
     'day-of-week'
-    var Day = "apple";
+    var Day = "day";
     if(layer.feature.properties.COLLDAY == "FRI"){
       Day = "Friday"
     }
