@@ -6,6 +6,7 @@ var map = L.map('map', {
   center: [40.000, -75.1090],
   zoom: 11
 });
+map.initialBounds = map.getBounds()
 var Stamen_TonerLite = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
   attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   subdomains: 'abcd',
@@ -13,7 +14,56 @@ var Stamen_TonerLite = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{
   maxZoom: 20,
   ext: 'png'
 }).addTo(map);
+arbitraryMarker = [];
+markerIcon='';
 
+/* =====================
+Customized Icon Configuration
+===================== */
+var blueIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
+var redIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
+var greenIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
+var yellowIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
+var purpleIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
 
 /* =====================
 
@@ -126,11 +176,18 @@ of the application to report/display this information.
 
 ===================== */
 
-var dataset = ""
+var dataset = "https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/geojson/philadelphia-garbage-collection-boundaries.geojson"
 var featureGroup;
 
 var myStyle = function(feature) {
-  return {};
+  switch (feature.properties.COLLDAY) {
+    case 'MON': return {color: "blue"};
+    case 'TUE': return {color: "red"};
+    case 'WED': return {color: "green"};
+    case 'THU': return {color: 'yellow'};
+    case 'FRI': return {color: 'purple'};
+    default: return {color: 'black'} // we probably have some "junk" data without a value for COLLDAY!!
+  }
 };
 
 var showResults = function() {
@@ -146,6 +203,18 @@ var showResults = function() {
   $('#results').show();
 };
 
+var removeMarkers = function(){
+  map.removeLayer(arbitraryMarker);
+}
+
+var closeResults = function() {
+  // => <div id="intro">
+  $('#intro').show();
+  // => <div id="results" css="display: none">
+  $('#results').hide();
+  map.fitBounds(map.initialBounds)
+  removeMarkers();
+};
 
 var eachFeatureFunction = function(layer) {
   layer.on('click', function (event) {
@@ -154,14 +223,42 @@ var eachFeatureFunction = function(layer) {
     Check out layer.feature to see some useful data about the layer that
     you can use in your application.
     ===================== */
-    console.log(layer.feature);
+    // console.log(layer.feature);
+    removeMarkers();
+    $('h1.day-of-week').text(collectionDay(layer.feature));
+    $('span.day-of-week').text(collectionDay(layer.feature));
     showResults();
+    // console.log(event)
+    arbitraryMarker = L.marker(event.latlng, {icon: markerIcon});
+    arbitraryMarker.addTo(map)
+    // Zoom to a particular feature when clicked
+    map.fitBounds(event.target.getBounds())
+    // console.log(event.target.getBounds())s
+    $('span.leaflet-id').text(layer._leaflet_id)
+    // console.log(layer._leaflet_id)
+    // console.log(event)
   });
 };
 
 var myFilter = function(feature) {
-  return true;
+  // Avoid creating visualization for null data
+  validCOLLDAY = ['MON', 'TUE', 'WED','THU', 'FRI']
+  return(_.contains(validCOLLDAY, feature.properties.COLLDAY))
 };
+
+var collectionDay = function(feature){
+  var displayDay = '';
+  // Add collection information to the sidebar
+  switch (feature.properties.COLLDAY) {
+      case 'MON': displayDay = 'Monday'; markerIcon = blueIcon; break;
+      case 'TUE': displayDay = 'Tuesday'; markerIcon = redIcon;  break;
+      case 'WED': displayDay = 'Wednesday'; markerIcon = greenIcon;  break;
+      case 'THU': displayDay = 'Thursday'; markerIcon = yellowIcon; break;
+      case 'FRI': displayDay = 'Friday'; markerIcon = purpleIcon; break;
+      default: displayDay = '';
+  }
+  return displayDay;
+}
 
 $(document).ready(function() {
   $.ajax(dataset).done(function(data) {
@@ -170,8 +267,25 @@ $(document).ready(function() {
       style: myStyle,
       filter: myFilter
     }).addTo(map);
-
+    
     // quite similar to _.each
     featureGroup.eachLayer(eachFeatureFunction);
+
+    // _.each(parsedData, function(dat){
+    //   dat.properties
+    // })
+    // console.log(parsedData.features)
+    
+    // which day of the week was the most common for garbage removal?
+    COLLDAYStats = _.countBy(parsedData.features, function(feature){
+      return feature.properties.COLLDAY
+    })
+    console.log(COLLDAYStats)
+
+    // aa = _.countBy(parsedData, function(dat){
+    //   return dat.features
+    // })
+    // console.log(aa)
+    // console.log(parsedData.features.properties)
   });
 });

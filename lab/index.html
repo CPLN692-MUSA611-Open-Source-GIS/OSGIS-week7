@@ -10,6 +10,7 @@
   <body>
     <!-- Sidebar -->
     <div class="sidebar">
+      <button onclick= 'closeResults()' id='close-results' style='position: absolute; right: 10px;'> Close </button>
       <div id="intro">
         <h1>Garbage Collection Map</h1>
         <p class="main">The city of Philadelphia collects garbage from
@@ -18,6 +19,10 @@
         <p>This application shows each region color coded based on day of
         week of garbage collection. To get more information about garbage
         collection for one of the regions, click on that region on the map.</p>
+        <p>Based on the geojson data loaded for this app, 
+          we notice that except for the two regions with 
+          no valid values for collection day shown, 
+          all the weekdays have<strong> the same number of garbage removal projects </strong> (one for each region) to conduct.</p>
       </div>
       <div id="results" style="display: none;">
         <h1 class="day-of-week">Day of Week</h1>
@@ -25,13 +30,33 @@
         Day of Week</span>.</p>
         <p>Please be sure to leave your garbage outside on <span class="day-of-week">
         Day of Week</span>. If this week is a federal holiday, leave your
-        garbage outside on the following day.</p>
+        garbage outside on the following day.</p><br>
+        <p>Leaflet Layer ID (for querying reference):<p>
+          <span class="leaflet-id"></span><br><br>
+        <div id='note'><i>Note: the marker appears to show where the mouse clicked ONLY</i></div>
       </div>
+      <hr>
+      <div id='click-instructions'>Click inside any region to see more details.</div> <br>
+      <div id='close-button-usage'>Click the [Close] button anytime to return to the app's initial state.</div>
     </div>
     <!-- Map -->
     <div id="map" class="map"></div>
     <!-- Legend -->
-    <div class="legend"></div>
+    <div class="legend">
+      <h3> Your Garbage Collection Day </h2>
+      <ul>
+        <div class="legendBox" style="background:rgb(202, 207, 251); border: 2px solid blue" id="TUE"></div>
+          Monday<br><br>
+          <div class="legendBox" style="background:rgb(243, 198, 198); border: 2px solid red" id='MON'></div>
+          Tuesday<br><br>
+          <div class="legendBox" style="background:rgb(202, 225, 202); border: 2px solid green" id="WED"></div>
+          Wednesday<br><br>
+          <div class="legendBox" style="background:rgb(251, 252, 210); border: 2px solid rgb(220, 187, 111)" id="THU"></div>
+          Thursday<br><br>
+          <div class="legendBox" style="background:rgb(224, 200, 225); border: 2px solid purple" id="FRI"></div>
+          Friday<br><br>
+      </ul>
+    </div>
     <!-- Javascript Imports -->
     <script src="js/jquery-2.2.0.js"></script>
     <script src="js/underscore.js"></script>

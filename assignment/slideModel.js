@@ -5,8 +5,20 @@ Week 6 Assignment: Slide Model
 /** Here's a simple 'model' of a slide.
  *  It tracks the slide's index and the title we want in our HTML
  */
-var slideExample = {
+var slideExample1 = {
   slideNumber: 1,
+  title: "My first slide",
+  filter: function(geojsonFeature) { return true }
+};
+
+var slideExample2 = {
+  slideNumber: 2,
+  title: "My first slide",
+  filter: function(geojsonFeature) { return true }
+};
+
+var slideExample3 = {
+  slideNumber: 3,
   title: "My first slide",
   filter: function(geojsonFeature) { return true }
 };
