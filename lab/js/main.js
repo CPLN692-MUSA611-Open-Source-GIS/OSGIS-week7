@@ -126,12 +126,17 @@ of the application to report/display this information.
 
 ===================== */
 
-var dataset = ""
+var dataset = "https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/geojson/philadelphia-garbage-collection-boundaries.geojson"
 var featureGroup;
+var initialBounds = map.getBounds()
 
 var myStyle = function(feature) {
-  return {};
-};
+      if (feature.properties.COLLDAY === 'MON') {return {color: '#DFFF00'}}
+      else if (feature.properties.COLLDAY === 'TUE') {return {color: '#0400ff'}}
+      else if (feature.properties.COLLDAY === 'WED') {return {color: '#e29607'}}
+      else if (feature.properties.COLLDAY === 'THU') {return {color: '#DE3163'}}
+      else if (feature.properties.COLLDAY === 'FRI') {return {color: '#9FE2BF'}}
+  };
 
 var showResults = function() {
   /* =====================
@@ -146,6 +151,17 @@ var showResults = function() {
   $('#results').show();
 };
 
+var closeResults = function() {
+  /* =======
+  Function to close out of the zoomed in section of the map and return to
+  the original state of the application
+  ======== */
+  $('#results').hide();
+  // => <div id="results">
+  $('#intro').show();
+  map.fitBounds(initialBounds)
+};
+
 
 var eachFeatureFunction = function(layer) {
   layer.on('click', function (event) {
@@ -155,12 +171,28 @@ var eachFeatureFunction = function(layer) {
     you can use in your application.
     ===================== */
     console.log(layer.feature);
+    let dowDisplay = ''
+    if (layer.feature.properties.COLLDAY === 'MON') {dowDisplay = 'Monday'}
+    else if (layer.feature.properties.COLLDAY === 'TUE') {dowDisplay = 'Tuesday'}
+    else if (layer.feature.properties.COLLDAY === 'WED') {dowDisplay = 'Wednesday'}
+    else if (layer.feature.properties.COLLDAY === 'THU') {dowDisplay = 'Thursday'}
+    else if (layer.feature.properties.COLLDAY === 'FRI') {dowDisplay = 'Friday'}
+    else if (layer.feature.properties.COLLDAY === 'SAT') {dowDisplay = 'Saturday'}
+    else if (layer.feature.properties.COLLDAY === 'SUN') {dowDisplay = 'Sunday'}
+
+    $('.day-of-week').text(dowDisplay)
+    var mapBounds = event.target.getBounds();
+    map.fitBounds(mapBounds);
     showResults();
   });
 };
 
 var myFilter = function(feature) {
-  return true;
+  if (feature.properties.COLLDAY != ' ' ) {
+    return true;
+  } else {
+    return false
+  }
 };
 
 $(document).ready(function() {
@@ -171,7 +203,16 @@ $(document).ready(function() {
       filter: myFilter
     }).addTo(map);
 
+    var counts = _.countBy(parsedData.features, function(feature){
+      return feature.properties.COLLDAY
+    })
+    // Log this to the console for now. Will add to sidebar later if I have time.
+    console.log(counts)
+
     // quite similar to _.each
     featureGroup.eachLayer(eachFeatureFunction);
+    // For now, this just returns to initial page after 5s.
+    // Will add close button later if I have time.
+    setTimeout(() => {  closeResults() }, 5000);
   });
 });
