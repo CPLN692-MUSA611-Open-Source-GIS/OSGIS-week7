@@ -218,6 +218,9 @@ $(document).ready(function() {
       style: myStyle,
       filter: myFilter
     }).addTo(map);
+    var counts = _.countBy(parsedData.features, function(feature){
+      return feature.properties.COLLDAY
+    })
     // quite similar to _.each
     featureGroup.eachLayer(eachFeatureFunction);
   });
