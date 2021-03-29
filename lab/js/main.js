@@ -126,11 +126,17 @@ of the application to report/display this information.
 
 ===================== */
 
-var dataset = ""
+var dataset = "https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/geojson/philadelphia-garbage-collection-boundaries.geojson"
 var featureGroup;
 
 var myStyle = function(feature) {
-  return {};
+  switch(feature.properties.COLLDAY){
+    case 'MON' : return {fillColor: '#658EA9', stroke : false, fillOpacity: 0.7};
+    case 'TUE' : return {fillColor: '#88B2CC', stroke : false, fillOpacity: 0.7};
+    case 'WED' : return {fillColor: '#E7D4C0', stroke : false, fillOpacity: 0.7};
+    case 'THU' : return {fillColor: '#E98973', stroke : false, fillOpacity: 0.7};
+    case 'FRI' : return {fillColor: '#C4AC95', stroke : false, fillOpacity: 0.7}
+  }
 };
 
 var showResults = function() {
@@ -147,8 +153,21 @@ var showResults = function() {
 };
 
 
+
+
+
+
 var eachFeatureFunction = function(layer) {
   layer.on('click', function (event) {
+    if (event.target.feature.properties.COLLDAY === 'MON'){ $('.day-of-week').text('Monday')}
+    else if (event.target.feature.properties.COLLDAY === 'TUE'){ $('.day-of-week').text('Tuesday')}
+    else if(event.target.feature.properties.COLLDAY === 'WED'){ $('.day-of-week').text('Wednesday')}
+    else if(event.target.feature.properties.COLLDAY === 'THU'){ $('.day-of-week').text('Thursday')}
+    else if (event.target.feature.properties.COLLDAY === 'FRI'){ $('.day-of-week').text('Friday')}
+
+    // fit bounds
+    map.fitBounds(event.target.getBounds())
+    
     /* =====================
     The following code will run every time a layer on the map is clicked.
     Check out layer.feature to see some useful data about the layer that
@@ -160,8 +179,37 @@ var eachFeatureFunction = function(layer) {
 };
 
 var myFilter = function(feature) {
+  if (feature.properties.COLLDAY === 'MON' |feature.properties.COLLDAY === 'TUE' | feature.properties.COLLDAY === 'WED' |feature.properties.COLLDAY === 'THU' |
+  feature.properties.COLLDAY === 'FRI')
   return true;
 };
+
+// Add Legend
+var legend = L.control({position: 'bottomright'});
+var colorpalette = ['#658EA9','#88B2CC','#E7D4C0','#E98973', '#C4AC95' ]
+
+legend.onAdd = function (map) {
+
+  var div = L.DomUtil.create('div', 'info legend'),
+      grades = ["MON", "TUE", "WED", "THU", "FRI"],
+      labels = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+
+  // loop through our density intervals and generate a label with a colored square for each interval
+  for (var i = 0; i < grades.length; i++) {
+      div.innerHTML +=
+          '<i style="background:' + colorpalette[i] + '"></i> ' +
+          (labels[i]+ '<br>');
+  }
+
+  return div;
+};
+
+legend.addTo(map);
+
+
+
+
+
 
 $(document).ready(function() {
   $.ajax(dataset).done(function(data) {
@@ -170,7 +218,6 @@ $(document).ready(function() {
       style: myStyle,
       filter: myFilter
     }).addTo(map);
-
     // quite similar to _.each
     featureGroup.eachLayer(eachFeatureFunction);
   });
