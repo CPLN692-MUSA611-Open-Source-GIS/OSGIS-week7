@@ -126,11 +126,21 @@ of the application to report/display this information.
 
 ===================== */
 
-var dataset = ""
+var dataset = "https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/geojson/philadelphia-garbage-collection-boundaries.geojson"
 var featureGroup;
 
+var weekdaysColor = {
+  "MON" : "#48D1CC",
+  "TUE" : "#CD5C5C",
+  "WED" : "#32CD32",
+  "THU" : "#FFFFE0",
+  "FRI" : "#F0F8FF",
+  "SAT" : "#663399",
+  "SUN" : "#800000",  
+}
+
 var myStyle = function(feature) {
-  return {};
+  return { color: weekdaysColor[feature.properties.COLLDAY]} ;
 };
 
 var showResults = function() {
@@ -146,6 +156,15 @@ var showResults = function() {
   $('#results').show();
 };
 
+var weekdays = {
+  "MON" : "Monday", 
+  "TUE" : "Tuesday",
+  "WED" : "Wednesday",
+  "THU" : "Thursday",
+  "FRI" : "Friday",
+  "SAT" : "Saturday",
+  "SUN" : "Sunday"
+};
 
 var eachFeatureFunction = function(layer) {
   layer.on('click', function (event) {
@@ -154,16 +173,31 @@ var eachFeatureFunction = function(layer) {
     Check out layer.feature to see some useful data about the layer that
     you can use in your application.
     ===================== */
-    console.log(layer.feature);
+    $(".day-of-week").each(
+      (index, element) => {
+        $(element).text(weekdays[event.target.feature.properties.COLLDAY])
+      }
+    );
+    console.log(event.target.getBounds())
+    map.fitBounds(event.target.getBounds())
+
     showResults();
   });
 };
 
 var myFilter = function(feature) {
+  if (feature.properties.COLLDAY in weekdays){
+    return true;
+  } else return false;
   return true;
 };
 
 $(document).ready(function() {
+  Object.entries(weekdaysColor).forEach(
+    ([day, color]) => {
+      $("." + day).css("background-color", color);
+    }
+  )
   $.ajax(dataset).done(function(data) {
     var parsedData = JSON.parse(data);
     featureGroup = L.geoJson(parsedData, {
