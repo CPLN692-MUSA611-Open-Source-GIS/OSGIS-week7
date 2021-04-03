@@ -196,7 +196,7 @@ var eachFeatureFunction = function(layer) {
     console.log("The leaflet ID is "+featureGroup.getLayerId(layer));
 
     //define close button
-    $('.sidebar').append('<button id="mybutton">Close</button>')
+    $('#buttondiv').html('<button id="mybutton">Close</button>')
     $('#mybutton').css({top:0, right:0, position:'absolute'})
     $('#mybutton').click(function() {
       hideResults();
