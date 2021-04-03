@@ -126,12 +126,28 @@ of the application to report/display this information.
 
 ===================== */
 
-var dataset = ""
+var dataset = "https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/geojson/philadelphia-garbage-collection-boundaries.geojson";
 var featureGroup;
 
 var myStyle = function(feature) {
-  return {};
+ switch (feature.properties.COLLDAY) {
+  case 'MON': return {color: 'red'};
+  case 'TUE': return {color: 'blue'};
+  case 'WED': return {color: 'green'};
+  case 'THU': return {color: 'orange'};
+  case 'FRI': return {color: "purple"};
+  case 'SAT': return {color: "brown"};
+  case 'SUN': return {color: "pink"};
+}
 };
+
+//change legend color
+var Style_lst = ["red", "blue","green","orange","purple","brown","pink"];
+
+for(i=0; i<7; i++) {
+  var str = "#label"+String(i+1)
+  $(str).css({backgroundColor:Style_lst[i]})
+}
 
 var showResults = function() {
   /* =====================
@@ -146,6 +162,22 @@ var showResults = function() {
   $('#results').show();
 };
 
+var hideResults = function() {
+  map.setView([40.000, -75.1090],11);
+  $('#mybutton').remove();
+  $('#results').hide();
+  $('#intro').show();
+};
+
+var weekdays = {
+  "MON" : "Monday", 
+  "TUE" : "Tuesday",
+  "WED" : "Wednesday",
+  "THU" : "Thursday",
+  "FRI" : "Friday",
+  "SAT" : "Saturday",
+  "SUN" : "Sunday"
+};
 
 var eachFeatureFunction = function(layer) {
   layer.on('click', function (event) {
@@ -154,18 +186,36 @@ var eachFeatureFunction = function(layer) {
     Check out layer.feature to see some useful data about the layer that
     you can use in your application.
     ===================== */
+    map.fitBounds(layer.getBounds());
+    var weekday = weekdays[layer.feature.properties.COLLDAY];
+    $('.day-of-week').text(weekday);
     console.log(layer.feature);
     showResults();
+
+    //get the leaflet ID
+    console.log("The leaflet ID is "+featureGroup.getLayerId(layer));
+
+    //define close button
+    $('#buttondiv').html('<button id="mybutton">Close</button>')
+    $('#mybutton').css({top:0, right:0, position:'absolute'})
+    $('#mybutton').click(function() {
+      hideResults();
+    })
   });
 };
 
 var myFilter = function(feature) {
-  return true;
+  if(feature.properties.COLLDAY != ' '){
+    return true;
+  }
+  else
+    return false;
 };
 
 $(document).ready(function() {
   $.ajax(dataset).done(function(data) {
     var parsedData = JSON.parse(data);
+    console.log(parsedData);
     featureGroup = L.geoJson(parsedData, {
       style: myStyle,
       filter: myFilter
@@ -173,5 +223,35 @@ $(document).ready(function() {
 
     // quite similar to _.each
     featureGroup.eachLayer(eachFeatureFunction);
+
+    /* ===the most common day for garbage removal===*/
+    weekday_lst=[]
+    featureGroup.eachLayer(function (layer) {
+      weekday_lst.push({"weekday":layer.feature.properties.COLLDAY})
+    });
+    var day_gp = _.groupBy(weekday_lst, 'weekday');
+  
+    day_cnt = {}
+    for (var key in day_gp) {
+      day_cnt[key] = day_gp[key].length
+    }
+    
+    var vals = _.values(day_cnt);
+    var max = _.max(vals);
+   
+    max_arr=[]
+    for(var i in day_cnt)
+    {
+      if(day_cnt[i] == max){max_arr.push(i) }
+    }
+    var all = "";
+    for (var i in max_arr){
+      all = all+String(max_arr[i])+'/'
+    }
+    all = all.substring(0,all.length-1)
+ 
+    $('.sidebar').append('<p id="commonday"></p>')
+    $('#commonday').text("The most common day for garbage removal is: "+ all)
+
   });
 });
