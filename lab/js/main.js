@@ -125,12 +125,22 @@ the week was the most common for garbage removal? Update the original state
 of the application to report/display this information.
 
 ===================== */
+//Task 1
+var dataset = "https://raw.githubusercontent.com/CPLN692-MUSA611-Open-Source-GIS/datasets/master/geojson/philadelphia-garbage-collection-boundaries.geojson"
 
-var dataset = ""
+//Task 2 
 var featureGroup;
 
 var myStyle = function(feature) {
-  return {};
+  switch (feature.properties.COLLDAY) {
+    case 'MON': return {color: '#F04022', weight: 3};
+    case 'TUE': return {color: 'purple', weight: 3};
+    case 'WED': return {color: 'orange', weight: 3};
+    case 'THU': return {color: 'yellow', weight: 3};
+    case 'FRI': return {color: "pink", weight: 3};
+    case 'SAT': return {color: "blue", weight: 3};
+    case 'SUN': return {color: "brown", weight: 3};
+  }
 };
 
 var showResults = function() {
@@ -156,11 +166,42 @@ var eachFeatureFunction = function(layer) {
     ===================== */
     console.log(layer.feature);
     showResults();
+
+    //Task 4
+    if(layer.feature.properties.COLLDAY=="MON"){
+      $('.day-of-week').text( "Monday")
+    }
+    else if(layer.feature.properties.COLLDAY=="TUE"){
+      $('.day-of-week').text("Tuesday")
+    }
+    else if(layer.feature.properties.COLLDAY=="WED"){
+      $('.day-of-week').text("Wednesday")
+    }
+    else if(layer.feature.properties.COLLDAY=="THU"){
+      $('.day-of-week').text("Thursday")
+    }
+    else if(layer.feature.properties.COLLDAY=="FRI"){
+      $('.day-of-week').text("Friday")
+    }
+    else if(layer.feature.properties.COLLDAY=="SAT"){
+      $('.day-of-week').text("Saturday")
+    }
+    else{
+      $('.day-of-week').text("Sunday")
+    }
+
+    //Task 6
+    map.fitBounds(event.target.getBounds())
   });
 };
 
+//Task 3
 var myFilter = function(feature) {
-  return true;
+  if(feature.properties.COLLDAY != " "){
+    return true;
+  }
+  else
+    return false;
 };
 
 $(document).ready(function() {
